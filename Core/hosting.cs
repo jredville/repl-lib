@@ -139,11 +139,16 @@ namespace Core {
         }
 
         public override void Reset(ScriptScope scope) {
-            _engine = Ruby.CreateEngine((setup) =>
-            {
-                setup.Options["InterpretedMode"] = true;
-                setup.Options["SearchPaths"] = new[] { MerlinPath + @"\libs", BasePath + @"\ruby\site_ruby\1.8", BasePath + @"\ruby\site_ruby", BasePath + @"\ruby\1.8" };
-            });
+            var setup = new ScriptRuntimeSetup();
+            var py = new LanguageSetup(typeof(PythonContext).AssemblyQualifiedName, "Python", new[] { "py" }, new[] { ".py" });
+            var rb = new LanguageSetup(typeof(RubyContext).AssemblyQualifiedName, "Ruby", new[] { "rb" }, new[] { ".rb" });
+            
+            rb.Options["InterpretedMode"] = true;
+            rb.Options["SearchPaths"] = new[] { MerlinPath + @"\libs", BasePath + @"\ruby\site_ruby\1.8", BasePath + @"\ruby\site_ruby", BasePath + @"\ruby\1.8" };
+            setup.LanguageSetups.Add(py);
+            setup.LanguageSetups.Add(rb);
+            var runtime = new ScriptRuntime(setup);
+            _engine = runtime.GetEngine("rb");
 
             _scope = scope == null ? _engine.Runtime.CreateScope() : scope;
             _topLevelBinding = (IronRuby.Builtins.Binding)_engine.Execute("binding", _scope);

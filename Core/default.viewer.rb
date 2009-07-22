@@ -3,18 +3,18 @@
 
 class Object
   def as_xaml
-    "=> #{self}"
+    "#=> #{self}"
   end
 end
 
 class NilClass
   def as_xaml
-    "=> nil"
+    "#=> nil"
   end
 end
 
 class Array
   def as_xaml
-    "=> #{self.inspect}"
+    "#=> #{self.inspect}"
   end
 end

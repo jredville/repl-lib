@@ -43,9 +43,7 @@ namespace Core {
             // TODO: generalize and refactor this
             var path = Environment.GetEnvironmentVariable("REPL_PLUGINS");
             if (path == null) {
-                var home = Environment.GetEnvironmentVariable("HOME");
-                var homeDrive = Environment.GetEnvironmentVariable("HOMEDRIVE");
-                path = homeDrive + home;
+                path = (string)CurrentEngine.Execute("File.expand_path(\"~\").to_clr_string");
                 path = Path.Combine(path, "ReplPlugins");
             }
 
